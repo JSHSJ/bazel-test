@@ -1,0 +1,14 @@
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary", "pkg_npm")
+load("@npm//vite:index.bzl", "vite")
+
+# Run project
+vite(
+    name = "dev",
+    args = []
+)
+
+# Build project
+vite(
+    name = "build",
+    args = []
+)
