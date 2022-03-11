@@ -1,0 +1,47 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary", "pkg_npm")
+load("@npm//@bazel/typescript:index.bzl", "ts_project")
+load("@npm//@bazel/esbuild:index.bzl", "esbuild")
+load("@npm//http-server:index.bzl", "http_server")
+load("@build_bazel_rules_nodejs//:index.bzl", "pkg_web")
+
+ts_project(
+    name = "src",
+    srcs = [
+        "src/App.tsx",
+        "src/main.tsx",
+        "src/logo.svg"
+    ],
+    resolve_json_module = True,
+    tsconfig = ":tsconfig.json",
+    deps = [
+        "@npm//@types/react",
+        "@npm//@types/react-dom",
+        "@npm//react",
+        "@npm//react-dom",
+        "//packages/test-api"
+    ]
+)
+
+esbuild(
+    name = "bundle",
+    entry_point = "src/main.tsx",
+    deps = [":src"],
+)
+
+pkg_web(
+        name = 'pkg',
+        srcs = [
+            "index.html",
+            ":bundle"
+        ],
+    )
+
+http_server(
+    name = "dev",
+    data = [
+        ":pkg"
+    ],
+    args = [".", "-p 3000", "-c-1"]
+)

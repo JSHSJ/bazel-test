@@ -2,3 +2,30 @@
 # See https://docs.bazel.build/versions/main/build-ref.html#BUILD_files
 
 
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary", "pkg_npm")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@npm//vite:index.bzl", "vite")
+
+write_file(
+    name = "chdir",
+    out = "chdir.js",
+    content = ["process.chdir(require('path').join(process.env.BUILD_WORKSPACE_DIRECTORY, '" + package_name() + "'));"],
+)
+
+# Run project
+vite(
+    name = "dev",
+    args = [
+        "--node_options=--require=./$(rootpath :chdir)",
+    ],
+    data = [":chdir"],
+)
+
+# Build project
+vite(
+    name = "build",
+    args = [
+        "build --node_options=--require=./$(rootpath :chdir)",
+    ],
+    data = [":chdir"],
+)

@@ -1,0 +1,31 @@
+package(default_visibility = ["//visibility:public"])
+
+load(
+    "@npm//@ubiquitoustech/rules_vite:index.bzl",
+    "vite",
+    "vite_dev",
+)
+
+# ALMOST works, but throws unbound variable error?
+
+vite_dev(
+    name = "dev",
+    srcs = glob(["src/**"]) + [
+        ":index.html",
+        ":package.json",
+        ":tsconfig.json",
+    ],
+    config = ":vite.config.ts",
+    npm_managed_directory_name = "npm",
+    npm_managed_directory_path = "node_modules",
+    deps = [
+        "@npm//@types/react",
+        "@npm//@types/react-dom",
+        "@npm//@vitejs/plugin-react",
+        "@npm//react",
+        "@npm//react-dom",
+        "@npm//typescript",
+        "@npm//vite",
+        "//packages/test-api"
+    ],
+)

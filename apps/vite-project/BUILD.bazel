@@ -1,14 +1,36 @@
+package(default_visibility = ["//visibility:public"])
+
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary", "pkg_npm")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@npm//vite:index.bzl", "vite")
+
+write_file(
+    name = "chdir",
+    out = "chdir.js",
+    content = ["process.chdir(require('path').join(process.env.BUILD_WORKSPACE_DIRECTORY, '" + package_name() + "'));"],
+)
 
 # Run project
 vite(
     name = "dev",
-    args = []
+    args = [
+        "--node_options=--require=./$(rootpath :chdir)",
+    ],
+#    adding package to data does not work
+    data = [
+        ":chdir",
+        "//packages/test-api"
+    ]
 )
 
 # Build project
 vite(
     name = "build",
-    args = []
+    args = [
+        "build --node_options=--require=./$(rootpath :chdir)",
+    ],
+    data = [
+        ":chdir",
+        "//packages/test-api"
+        ],
 )

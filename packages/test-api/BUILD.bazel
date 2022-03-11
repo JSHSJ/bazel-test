@@ -1,0 +1,18 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@npm//@bazel/typescript:index.bzl", "ts_project")
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary", "pkg_npm")
+
+ts_project(
+    name = "build",
+    srcs = [
+        "main.ts",
+    ],
+    tsconfig = ":tsconfig.json",
+)
+
+pkg_npm(
+    name = "test-api",
+    package_name = "test-api",
+    deps = [":build"]
+)

@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { sayHello } from "test-api";
-import logo from './logo.svg'
-import './App.css'
+import { sayHello } from "test-api"
+// import logo from './logo.svg'
+// import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -9,17 +9,14 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        {/*<img src={logo} className="App-logo" alt="logo" />*/}
         <p>Hello Vite + React!</p>
         <p>
           <button type="button" onClick={() => setCount((count) => count + 1)}>
             count is: {count}
           </button>
-          <button type={"button"} onClick={() => sayHello("Joshua")}>SAY HELLO</button>
         </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
+        <p>HALLO Joshua!</p>
         <p>
           <a
             className="App-link"
